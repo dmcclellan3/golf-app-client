@@ -45,7 +45,7 @@ export const getToken = ({ auth, username, password }) => {
 export const fetchProfile = ({ auth }) => {
     axios({
         method: 'GET',
-        url:`${baseUrl}/profile/`,
+        url:`${baseUrl}/scores/`,
         headers: {
             Authorization: `Bearer ${auth.accessToken}`
         }
@@ -57,10 +57,10 @@ export const fetchProfile = ({ auth }) => {
 //sends request to create post to API with the content of the post 
 
 export const createScore = ({ auth, content }) => {
-    console.log('CREATE Score: ', auth, content)
+    console.log('CREATE SCORE: ', auth, content)
     return axios({
         method: 'POST',
-        url: `${baseUrl}/posts/`,
+        url: `${baseUrl}/scores/`,
         headers: {
             Authorization: `Bearer ${auth.accessToken}`
         },
@@ -69,7 +69,7 @@ export const createScore = ({ auth, content }) => {
         }
     })
     .then(response => {
-        console.log('CREATE Score RESPONSE: ', response)
+        console.log('CREATE SCORE RESPONSE: ', response)
         return response
     })
     .catch(error => console.log('ERROR: ', error))
@@ -80,12 +80,12 @@ export const createScore = ({ auth, content }) => {
 //But similar to create this function is intended to send a different 
 //request "PUT" to update a previous post 
 
-export const updateScore = ({ auth, postId, content }) => {
-    console.log("edit score id", postId)
+export const updateScore = ({ auth, scoreId, content }) => {
+    console.log("edit score id", scoreId)
     console.log("content", content)
     return axios({
         method: 'PUT',
-        url: `${baseUrl}/posts/${postId}/`,
+        url: `${baseUrl}/scores/${scoreId}/`,
         headers: {
             Authorization: `Bearer ${auth.accessToken}`,
         },
@@ -94,7 +94,7 @@ export const updateScore = ({ auth, postId, content }) => {
         },
     })
     .then(response => {
-        console.log('UPDATE Score: ', response)
+        console.log('UPDATE SCORE: ', response)
         return response
     })
     .catch(error => console.log('ERROR: ', error))
@@ -103,16 +103,16 @@ export const updateScore = ({ auth, postId, content }) => {
 // Sends request to API to delete with the postID to specify what post 
 //to delete 
 
-export const deleteScore = ({ auth, postId }) => {
+export const deleteScore = ({ auth, scoreId }) => {
     return axios({
         method: 'DELETE',
-        url: `${baseUrl}/posts/${postId}/`,
+        url: `${baseUrl}/scores/${scoreId}/`,
         headers: {
             Authorization: `Bearer ${auth.accessToken}`,
         }
     })
     .then(response => {
-        console.log('DELETE Score RESPONSE: ', response)
+        console.log('DELETE SCORE RESPONSE: ', response)
         return response
     })
     .catch(error => console.log('ERROR: ', error))
@@ -121,10 +121,10 @@ export const deleteScore = ({ auth, postId }) => {
 // Fetches all the posts 
 
 export const getScores = ({ auth }) => {
-    console.log('GET Scores: AUTH: ', auth.accessToken)
+    console.log('GET SCORES: AUTH: ', auth.accessToken)
     return axios({
         method: 'GET',
-        url:`${baseUrl}/posts/`,
+        url:`${baseUrl}/scores/`,
         headers: {
             Authorization: `Bearer ${auth.accessToken}`
         }

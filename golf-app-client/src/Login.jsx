@@ -74,7 +74,7 @@ function Login() {
   const location = useLocation()
 
 const submit = () => {
-  getToken({ auth, username, password }).then(() => navigate('/posts'))
+  getToken({ auth, username, password }).then(() => navigate('/score'))
 }
 
 

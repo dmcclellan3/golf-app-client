@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { getPosts, updatePost, createPost, deletePost } from './api';
+import { getScores, updateScore, createScore, deleteScore } from './api';
 import { AuthContext } from './authContext';
 
-const Posts = () => {
+const Score = () => {
     const [scores, setScores] = useState([]);
     const [newScore, setNewScore] = useState('');
     const [editScoreId, setEditScoreId] = useState(null);
@@ -15,7 +15,7 @@ const Posts = () => {
         getScores({ auth })
             .then(response => {
                 console.log('Scores RESPONSE: ', response);
-                setScore(response.data);
+                setScores(response.data);
             })
             .catch(error => console.error('Error fetching posts:', error));
     }, [auth]);
