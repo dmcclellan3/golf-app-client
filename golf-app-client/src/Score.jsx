@@ -4,7 +4,7 @@ import { AuthContext } from './authContext';
 
 const Score = () => {
     const [scores, setScores] = useState([]);
-    const [newScore, setNewScore] = useState('');
+    const [newScore, setNewScore] = useState();
     const [editScoreId, setEditScoreId] = useState(null);
     const [editContent, setEditContent] = useState('');
     const { auth } = useContext(AuthContext);
@@ -23,7 +23,7 @@ const Score = () => {
     // Updates the screen with a new post entered that is called below 
 
     const handleNewScore = (e) => {
-        setNewPost(e.target.value);
+        setNewScore(e.target.value);
     };
 
     // Handles the submission of a new post 
@@ -33,12 +33,12 @@ const Score = () => {
     const handleScoreSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await createScore({ auth, content: newPost });
+            const response = await createScore({ auth, content: newScore });
             console.log('CREATE SCORE RESPONSE: ', response);
-            setScores([response.data, ...posts]);
+            setScores([...scores, response.data]);
             setNewScore('');
         } catch (error) {
-            console.error('Error creating post:', error);
+            console.error('ERROR CREATING SCORE:', error);
         }
     };
 

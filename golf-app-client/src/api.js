@@ -45,7 +45,7 @@ export const getToken = ({ auth, username, password }) => {
 export const fetchProfile = ({ auth }) => {
     axios({
         method: 'GET',
-        url:`${baseUrl}/scores/`,
+        url:`${baseUrl}/login/`,
         headers: {
             Authorization: `Bearer ${auth.accessToken}`
         }
@@ -129,6 +129,22 @@ export const getScores = ({ auth }) => {
             Authorization: `Bearer ${auth.accessToken}`
         }
     })
+}
+
+export const createCourse = ({ name, location }) => {
+    console.log('CREATE USER: ', name, location )
+    axios({
+        method: 'POST',
+        url: `${baseUrl}/courses/`, 
+        data: {
+            name,
+            location
+        }
+    })
+    .then(response => {
+        console.log('CREATE COURSE RESPONSE: ', response)
+    })
+    .catch(error => console.log('ERROR: ', error))
 }
 
 
