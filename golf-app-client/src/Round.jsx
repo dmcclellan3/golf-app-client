@@ -7,6 +7,8 @@ import {
 } from './api';
 import { useParams, } from 'react-router-dom';
 import { AuthContext } from './authContext';
+import './App.css'
+
 
 const TrackRound = () => {
     const { auth } = useContext( AuthContext )
@@ -107,16 +109,24 @@ const TrackRound = () => {
 //   };
 
   return (
-    <div>
-    <div className="d-flex">
+      <div className='round-container'>
+      <h1 className='title'>Track Round</h1>
+      <h3 className="course-name">Lakeside Golf Course</h3>
+      <h5>Current Score:</h5>
+        <div id='track-round' className="d-flex">
         <h2>Hole</h2>
         <div className="my-auto mx-3" onClick={() => setCurrentHole(currentHole - 1)}>{`<-`}</div>
         <h2 className="px-3 my-auto mx-2">{holes[currentHole -1]?.hole_number}</h2>
         <div className="my-auto mx-3" onClick={() => setCurrentHole(currentHole + 1)}>{`->`}</div>
     </div>
       {<h3>Par: {holes[currentHole -1]?.par}</h3>}
-      <h1>Track Round</h1>
-      <h3>Lakeside</h3>
+      <br />
+      <h3>Strokes</h3>
+      <br />
+      <h3>Putts</h3>
+      <br />
+      <h3>Penalties</h3>
+
       {/* {holes[currentHole -1]?.hole_number} */}
       {/* Create two number inputs and get values and pass them to API when called. */}
 
