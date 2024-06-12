@@ -13,8 +13,8 @@ const TrackRound = () => {
         //   const { roundId } = useParams();
 //   console.log('ROUND ID: ', roundId)
 //   const history = useHistory();
-//   const [holes, setHoles] = useState([]);
-//   const [currentHole, setCurrentHole] = useState(1);
+  const [holes, setHoles] = useState([]);
+  const [currentHole, setCurrentHole] = useState(1);
 //   const [strokes, setStrokes] = useState(0);
 //   const [putts, setPutts] = useState(0);
 //   const [penalties, setPenalties] = useState(0);
@@ -46,8 +46,23 @@ const TrackRound = () => {
 
     useEffect(() => {
         getTheRoundInfo()
-        getHoleInfo()
+        getAllHoles()
     }, [])
+
+    useEffect(() => {
+        console.log(holes[currentHole -1])
+    },[holes])
+
+    useEffect(() => {
+        console.log('UE Current Hole: ', currentHole)
+        if (currentHole <= 0) {
+            setCurrentHole(holes.length)
+        }
+        if (currentHole >= holes.length + 1) {
+            setCurrentHole(1)
+        }
+
+    },[currentHole])
 
     const getTheRoundInfo = async () => {
         try {
@@ -58,14 +73,17 @@ const TrackRound = () => {
         }
     }
 
-    const getHoleInfo = async () => {
+    const getAllHoles = async () => {
         try {
-            const hole = await fetchHoles({ auth })
-            console.log('FETCH HOLE: ', hole)
+            const allHoles = await fetchHoles({ auth })
+            console.log('FETCH HOLE: ', allHoles.data)
+            setHoles(allHoles.data)
         } catch (error) {
             console.log('fetchHoles: ERROR:', error )
         }
     }
+
+    
 
 
 //   const handleSubmit = async (e) => {
@@ -90,10 +108,16 @@ const TrackRound = () => {
 
   return (
     <div>
+    <div className="d-flex">
+        <h2>Hole</h2>
+        <div className="my-auto mx-3" onClick={() => setCurrentHole(currentHole - 1)}>{`<-`}</div>
+        <h2 className="px-3 my-auto mx-2">{holes[currentHole -1]?.hole_number}</h2>
+        <div className="my-auto mx-3" onClick={() => setCurrentHole(currentHole + 1)}>{`->`}</div>
+    </div>
+      {<h3>Par: {holes[currentHole -1]?.par}</h3>}
       <h1>Track Round</h1>
       <h3>Lakeside</h3>
-      {/* API to fetch holes for the course  */}
-      {/* API call to create hole.  Fill the data with mock data.  Hard coding a string and button that calls it.  */}
+      {/* {holes[currentHole -1]?.hole_number} */}
       {/* Create two number inputs and get values and pass them to API when called. */}
 
       {/* {currentHole <= holes.length ? (
