@@ -5,8 +5,6 @@ import axios from 'axios';
 
 
 
-
-
 const CourseList = () => {
   const [courses, setCourses] = useState([]);
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { getScores, updateScore, createScore, deleteScore } from './api';
 import { AuthContext } from './authContext';
+import { useNavigate } from 'react-router-dom';
 
 const Score = () => {
     const [scores, setScores] = useState([]);
@@ -8,27 +9,28 @@ const Score = () => {
     const [editScoreId, setEditScoreId] = useState(null);
     const [editContent, setEditContent] = useState('');
     const { auth } = useContext(AuthContext);
+    const navigate = useNavigate()
 
 // Fetches post from api, logs response and sets the posts from the data stored at the end point. 
 
-    useEffect(() => {
-        getScores({ auth })
-            .then(response => {
-                console.log('Scores RESPONSE: ', response);
-                setScores(response.data);
-            })
-            .catch(error => console.error('Error fetching posts:', error));
-    }, [auth]);
+    // useEffect(() => {
+    //     getScores({ auth })
+    //         .then(response => {
+    //             console.log('Scores RESPONSE: ', response);
+    //             setScores(response.data);
+    //         })
+    //         .catch(error => console.error('Error fetching posts:', error));
+    // }, [auth]);
 
-    // Updates the screen with a new post entered that is called below 
+    // Updates the screen with a new score entered that is called below 
 
     const handleNewScore = (e) => {
         setNewScore(e.target.value);
     };
 
-    // Handles the submission of a new post 
-    // calls createPost function from api 
-    // sets the post and logs any errors 
+    // Handles the submission of a new score 
+    // calls createScore function from api 
+    // sets the score and logs any errors 
 
     const handleScoreSubmit = async (e) => {
         e.preventDefault();
@@ -98,7 +100,7 @@ const Score = () => {
                 <a href="/">Profile</a>
             </nav>
             <div className="create-post-container">
-                <h3>Record a Score</h3>
+                <h3>Rounds</h3>
                 <div>
                     <input
                         type='text'
@@ -109,6 +111,7 @@ const Score = () => {
                 </div>
                 <br />
                 <button onClick={handleScoreSubmit}>Enter</button>
+                <button onClick= {() => navigate('/round')} >Start Round</button>
             </div>
             <div className="posts-container">
                 {scores && scores.map(score => (

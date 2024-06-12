@@ -11,6 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import Header from './Header'
 import Login from './Login'
 import Score from './Score'
+import TrackRound from './Round'
 import ErrorPage from './ErrorPage'
 import { useState } from 'react'
 import { AuthContext } from './authContext'
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
         path: '/score',
         element: <Score />
       },
+      {
+        path: '/round',
+        element: <TrackRound />
+      },
       
     ]
   }
@@ -67,9 +72,9 @@ const AuthContextProvider = ({ children }) => {
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <AuthContextProvider>
       <RouterProvider router={router} />
     </AuthContextProvider>
-  </React.StrictMode>,
+  // </React.StrictMode>,
 )

@@ -8,7 +8,7 @@ const baseUrl = 'http://127.0.0.1:8000'
 export const createUser = ({ username, password, firstName, lastName }) => {
     console.log('CREATE USER: ', username, password, firstName, lastName)
     axios({
-        method: 'POST',
+        method: 'post',
         url: `${baseUrl}/create-user/`, 
         data: {
             username,           
@@ -26,14 +26,14 @@ export const createUser = ({ username, password, firstName, lastName }) => {
 // Requests on authentication token after credentials are entered
 
 export const getToken = ({ auth, username, password }) => {
-    console.log('GET TOKEN: ', auth, username, password)
+    console.log('get TOKEN: ', auth, username, password)
     return axios.post(`${baseUrl}/token/`, {
         username,
         password,
     }) .then(response => {
-        console.log('GET TOKEN RESPONSE: ', response)
+        console.log('get TOKEN RESPONSE: ', response)
         auth.setAccessToken(response.data.access)
-        fetchProfile({ auth : {accessToken : response.data.access}})
+        // fetchProfile({ auth : {accessToken : response.data.access}})
     })
     .catch(error => console.log('Error: ', error))
 }
@@ -44,7 +44,7 @@ export const getToken = ({ auth, username, password }) => {
 
 export const fetchProfile = ({ auth }) => {
     axios({
-        method: 'GET',
+        method: 'get',
         url:`${baseUrl}/login/`,
         headers: {
             Authorization: `Bearer ${auth.accessToken}`
@@ -54,12 +54,12 @@ export const fetchProfile = ({ auth }) => {
     }).catch(error => console.log('ERROR: ', error))
 }
 
-//sends request to create post to API with the content of the post 
+//sends request to create score to API with the content of the score 
 
 export const createScore = ({ auth, content }) => {
     console.log('CREATE SCORE: ', auth, content)
     return axios({
-        method: 'POST',
+        method: 'post',
         url: `${baseUrl}/scores/`,
         headers: {
             Authorization: `Bearer ${auth.accessToken}`
@@ -78,7 +78,7 @@ export const createScore = ({ auth, content }) => {
 
 
 //But similar to create this function is intended to send a different 
-//request "PUT" to update a previous post 
+//request "PUT" to update a previous score 
 
 export const updateScore = ({ auth, scoreId, content }) => {
     console.log("edit score id", scoreId)
@@ -100,7 +100,7 @@ export const updateScore = ({ auth, scoreId, content }) => {
     .catch(error => console.log('ERROR: ', error))
 };
 
-// Sends request to API to delete with the postID to specify what post 
+// Sends request to API to delete with the scoreID to specify what score 
 //to delete 
 
 export const deleteScore = ({ auth, scoreId }) => {
@@ -118,12 +118,12 @@ export const deleteScore = ({ auth, scoreId }) => {
     .catch(error => console.log('ERROR: ', error))
 };
 
-// Fetches all the posts 
+// Fetches all the scores
 
 export const getScores = ({ auth }) => {
     console.log('GET SCORES: AUTH: ', auth.accessToken)
     return axios({
-        method: 'GET',
+        method: 'get',
         url:`${baseUrl}/scores/`,
         headers: {
             Authorization: `Bearer ${auth.accessToken}`
@@ -132,9 +132,9 @@ export const getScores = ({ auth }) => {
 }
 
 export const createCourse = ({ name, location }) => {
-    console.log('CREATE USER: ', name, location )
+    console.log('CREATE COURSE: ', name, location )
     axios({
-        method: 'POST',
+        method: 'post',
         url: `${baseUrl}/courses/`, 
         data: {
             name,
@@ -148,4 +148,42 @@ export const createCourse = ({ name, location }) => {
 }
 
 
+export const getCurrentRound = ({ auth }) => {
+    console.log('GET ROUND: AUTH: ', auth.accessToken)
+    return axios({
+        method: 'get',
+        url:`${baseUrl}/get-current-round/`,
+        headers: {
+            Authorization: `Bearer ${auth.accessToken}`
+          }
+    })
+}
 
+export const createRound = ({ user, course, date }) => {
+    console.log('CREATE ROUND: ', user, course, date )
+    axios({
+        method: 'post',
+        url: `${baseUrl}/rounds/`, 
+        data: {
+            user,
+            course,
+            date
+        }
+    })
+    .then(response => {
+        console.log('CREATE ROUND RESPONSE: ', response)
+    })
+    .catch(error => console.log('ERROR: ', error))
+
+}
+
+export const fetchHoles = ({ auth }) => {
+    console.log('FETCH HOLES: ', auth.accessToken)
+    return axios({
+        method: 'get',
+        url:`${baseUrl}/get-hole/`,
+        headers: {
+            Authorization: `Bearer ${auth.accessToken}`
+          }
+    })
+}
