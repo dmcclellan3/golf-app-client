@@ -75,7 +75,8 @@ const TrackRound = () => {
         try {
             const response = await getCurrentRound({ auth })
             console.log('BLAMMO: ROUND: ', response)
-            let roundId = response.data.length > 0 ? response.data[response.data.length - 1].pk : 0
+            let roundId = response.data.length > 0 ? response.data[response.data.length - 1].id : 0
+            console.log('BLAMMO: ROUND ID: ', roundId)
             getAllHoles({ roundId })
         } catch (error) {
             console.log('getTheRoundInfo: ERROR: ', error)
