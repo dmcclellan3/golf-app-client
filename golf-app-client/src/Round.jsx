@@ -17,10 +17,15 @@ const TrackRound = () => {
 //   const history = useHistory();
   const [holes, setHoles] = useState([]);
   const [currentHole, setCurrentHole] = useState(1);
-//   const [strokes, setStrokes] = useState(0);
-//   const [putts, setPutts] = useState(0);
-//   const [penalties, setPenalties] = useState(0);
-//   const [scores, setScores] = useState([]);
+  const [strokes, setStrokes] = useState(0);
+  const [putts, setPutts] = useState(0);
+  const [penalties, setPenalties] = useState(0);
+  const [totalStrokes, setTotalStrokes] = useState(0);
+  const [totalPutts, setTotalPutts] = useState(0);
+  const [totalPenalties, setTotalPenalties] = useState(0);
+  const [totalScore, setTotalScore] = useState()
+  const [updateScore, setUpdateScore] = useState()
+  const [scores, setScores] = useState([]);
 
 //   useEffect(() => {
 //     const getHoles = async () => {
@@ -48,7 +53,6 @@ const TrackRound = () => {
 
     useEffect(() => {
         getTheRoundInfo()
-        getAllHoles()
     }, [])
 
     useEffect(() => {
@@ -57,6 +61,7 @@ const TrackRound = () => {
 
     useEffect(() => {
         console.log('UE Current Hole: ', currentHole)
+        console.log('Current score: ' )
         if (currentHole <= 0) {
             setCurrentHole(holes.length)
         }
@@ -68,16 +73,18 @@ const TrackRound = () => {
 
     const getTheRoundInfo = async () => {
         try {
-            const round = await getCurrentRound({ auth })
-            console.log('BLAMMO: ROUND: ', round)
+            const response = await getCurrentRound({ auth })
+            console.log('BLAMMO: ROUND: ', response)
+            let roundId = response.data.length > 0 ? response.data[response.data.length - 1].pk : 0
+            getAllHoles({ roundId })
         } catch (error) {
             console.log('getTheRoundInfo: ERROR: ', error)
         }
     }
 
-    const getAllHoles = async () => {
+    const getAllHoles = async ({ roundId }) => {
         try {
-            const allHoles = await fetchHoles({ auth })
+            const allHoles = await fetchHoles({ auth, roundId })
             console.log('FETCH HOLE: ', allHoles.data)
             setHoles(allHoles.data)
         } catch (error) {
@@ -85,6 +92,74 @@ const TrackRound = () => {
         }
     }
 
+    const handleNextHole = () => {
+        setTotalStrokes(totalStrokes + parseInt(strokes));
+        setTotalPutts(totalPutts + parseInt(putts));
+        setTotalPenalties(totalPenalties + parseInt(penalties));
+        setCurrentHole(currentHole + 1)
+        setTotalScore(totalStrokes + parseInt(strokes))    
+        setStrokes(0);
+        setPutts(0);
+        setPenalties(0);
+    }
+
+    // const handlePreviousHole = () => {
+    //     updateCurrentHoleScore();
+    //     setCurrentHole(currentHole > 1 ? currentHole - 1 : holes.length);
+    //   };
+
+    const updateCurrentHoleScore = () => {
+        const updatedScores = scores.map(score =>
+          score.holeId === holes[currentHole - 1].id
+            ? { ...score, strokes: parseInt(strokes), putts: parseInt(putts), penalties: parseInt(penalties) }
+            : score
+        );
+        setScores(updatedScores);
+      };
+
+    //   const getTotal = (type) => {
+    //     return scores.reduce((total, score) => total + score[type], 0);
+    //   };
+
+
+
+    return (
+        <div className='round-container'>
+          <h1 className='title'>Track Round</h1>
+          <h3 className="course-name">Lakeside Golf Course</h3>
+          <h5 className='my-auto mx-3'>Current Score:{totalScore}</h5>
+          <div id='track-round'>
+            <h2>Hole</h2>
+            <div className="my-auto mx-3" onClick={() => setCurrentHole(currentHole - 1)}>{`<-`}</div>
+            <h2>{holes[currentHole - 1]?.hole_number}</h2>
+            <div className="my-auto mx-3" onClick={() => setCurrentHole(currentHole + 1)}>{`->`}</div>
+          </div>
+          <h3>Par: {holes[currentHole - 1]?.par}</h3>
+          <div>
+            <h5>Strokes</h5>
+            <input type="number" value={strokes} onChange={(e) => setStrokes(e.target.value)} />
+          </div>
+          <div>
+            <h5>Putts</h5>
+            <input type="number" value={putts} onChange={(e) => setPutts(e.target.value)} />
+          </div>
+          <div>
+            <h5>Penalties</h5>
+            <input type="number" value={penalties} onChange={(e) => setPenalties(e.target.value)} />
+          </div>
+          {/* <div className='total-scores'>
+          <h6>Total Strokes: {getTotal('strokes')}</h6>
+          <h6>Total Putts: {getTotal('putts')}</h6>
+          <h6>Total Penalties: {getTotal('penalties')}</h6>
+          </div> */}
+          <br />
+          <button className='next-hole-button' onClick={handleNextHole}>Next Hole</button>
+        </div>
+      );
+    };
+    
+    
+    export default TrackRound;
     
 
 
@@ -108,24 +183,24 @@ const TrackRound = () => {
 //     }
 //   };
 
-  return (
-      <div className='round-container'>
-      <h1 className='title'>Track Round</h1>
-      <h3 className="course-name">Lakeside Golf Course</h3>
-      <h5>Current Score:</h5>
-        <div id='track-round' className="d-flex">
-        <h2>Hole</h2>
-        <div className="my-auto mx-3" onClick={() => setCurrentHole(currentHole - 1)}>{`<-`}</div>
-        <h2 className="px-3 my-auto mx-2">{holes[currentHole -1]?.hole_number}</h2>
-        <div className="my-auto mx-3" onClick={() => setCurrentHole(currentHole + 1)}>{`->`}</div>
-    </div>
-      {<h3>Par: {holes[currentHole -1]?.par}</h3>}
-      <br />
-      <h3>Strokes</h3>
-      <br />
-      <h3>Putts</h3>
-      <br />
-      <h3>Penalties</h3>
+//   return (
+//       <div className='round-container'>
+//       <h1 className='title'>Track Round</h1>
+//       <h3 className="course-name">Lakeside Golf Course</h3>
+//       <h5>Current Score:</h5>
+//         <div id='track-round' className="d-flex">
+//         <h2>Hole</h2>
+//         <div className="my-auto mx-3" onClick={() => setCurrentHole(currentHole - 1)}>{`<-`}</div>
+//         <h2 className="px-3 my-auto mx-2">{holes[currentHole -1]?.hole_number}</h2>
+//         <div className="my-auto mx-3" onClick={() => setCurrentHole(currentHole + 1)}>{`->`}</div>
+//     </div>
+//       {<h3>Par: {holes[currentHole -1]?.par}</h3>}
+//       <br />
+//       <h3>Strokes</h3>
+//       <br />
+//       <h3>Putts</h3>
+//       <br />
+//       <h3>Penalties</h3>
 
       {/* {holes[currentHole -1]?.hole_number} */}
       {/* Create two number inputs and get values and pass them to API when called. */}
@@ -176,8 +251,7 @@ const TrackRound = () => {
           </li>
         ))}
       </ul> */}
-    </div>
-  );
-};
+//     </div>
+//   );
+// };
 
-export default TrackRound;

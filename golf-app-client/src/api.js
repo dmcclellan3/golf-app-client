@@ -177,11 +177,11 @@ export const createRound = ({ user, course, date }) => {
 
 }
 
-export const fetchHoles = ({ auth }) => {
+export const fetchHoles = ({ auth, roundId }) => {
     console.log('FETCH HOLES: ', auth.accessToken)
     return axios({
         method: 'get',
-        url:`${baseUrl}/get-hole/`,
+        url:`${baseUrl}/get-hole/${roundId}`,
         headers: {
             Authorization: `Bearer ${auth.accessToken}`
           }

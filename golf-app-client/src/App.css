@@ -290,3 +290,8 @@ button:hover {
     color: #555;
 }
 
+.next-hole-button {
+  border-radius: 5px;
+  max-width: 150px;
+}
+
