@@ -93,24 +93,39 @@ const Score = () => {
     //page render 
 
     return (
-        <div className="feed-container">
-            <nav className="nav-bar">
+        <div className="round-history-container">
+            {/* <nav className="nav-bar">
                 <a href="/score">Scores</a>
                 <a href="/login">Login</a>
                 <a href="/">Profile</a>
-            </nav>
+            </nav> */}
             <div className="create-post-container">
-                <h3>Rounds</h3>
+                <h3>Round History</h3>
                 <div>
-                    <input
+                    {/* <input
                         type='text'
                         value={newScore}
                         onChange={handleNewScore}
                         placeholder="Enter Score"
-                    />
+                    /> */}
                 </div>
                 <br />
-                <button onClick={handleScoreSubmit}>Enter</button>
+                {/* <button onClick={handleScoreSubmit}>Enter</button> */}
+                {/* <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br /> */}
                 <button onClick= {() => navigate('/round')} >Start Round</button>
             </div>
             <div className="posts-container">

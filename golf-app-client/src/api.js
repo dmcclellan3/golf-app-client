@@ -60,7 +60,7 @@ export const createScore = ({ auth, content }) => {
     console.log('CREATE SCORE: ', auth, content)
     return axios({
         method: 'post',
-        url: `${baseUrl}/scores/`,
+        url: `${baseUrl}/create-score/`,
         headers: {
             Authorization: `Bearer ${auth.accessToken}`
         },
