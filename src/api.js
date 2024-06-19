@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const baseUrl = import.meta.env.VITE_BASE_URL
+
+export const baseUrl = import.meta.env.VITE_BASE_URL
 // console.log('baseURL: ', baseUrl)
 
 // Sends a request to the backend API endpoint with the parameters
