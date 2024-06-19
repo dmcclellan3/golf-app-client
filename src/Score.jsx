@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { getScores, updateScore, createScore, deleteScore } from './api';
+import { getScores, updateScore, createScore, deleteScore, getCurrentRound, fetchRoundsHistory } from './api';
 import { AuthContext } from './authContext';
 import { useNavigate } from 'react-router-dom';
+import TrackRound from './Round';
 
 const Score = () => {
     const [scores, setScores] = useState([]);
     const [newScore, setNewScore] = useState();
     const [editScoreId, setEditScoreId] = useState(null);
     const [editContent, setEditContent] = useState('');
+    const [roundHistory, setRoundHistory] = useState([])
     const { auth } = useContext(AuthContext);
     const navigate = useNavigate()
 
@@ -23,6 +25,21 @@ const Score = () => {
     // }, [auth]);
 
     // Updates the screen with a new score entered that is called below 
+
+    useEffect(() => {
+        fetchRoundsHistory({ auth })
+        .then(response => {
+            console.log('FETCH ROUND RESPONSE: ', response)
+            setRoundHistory(response.data)
+        })
+        .catch(error => console.log('ERROR: ', error))
+
+      }, [auth]);  
+  
+
+       
+
+    
 
     const handleNewScore = (e) => {
         setNewScore(e.target.value);
@@ -87,44 +104,21 @@ const Score = () => {
         return new Date(dateString).toLocaleDateString(undefined, format);
     };
 
-    //page render 
 
     return (
         <div className="round-history-container">
-            {/* <nav className="nav-bar">
-                <a href="/score">Scores</a>
-                <a href="/login">Login</a>
-                <a href="/">Profile</a>
-            </nav> */}
             <div className="create-post-container">
                 <h3>Round History</h3>
-                <div>
-                    {/* <input
-                        type='text'
-                        value={newScore}
-                        onChange={handleNewScore}
-                        placeholder="Enter Score"
-                    /> */}
-                </div>
-                <br />
-                {/* <button onClick={handleScoreSubmit}>Enter</button> */}
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <button onClick= {() => navigate('/round')} >Start Round</button>
+                {roundHistory.map(round => ( 
+                    <div key={round.id} className="round-summary">
+                        <h4>Course: {round.course.name}</h4>
+                        <p>Date: {scoreDate(round.date)}</p>
+                        <p>Total Strokes: {round.scores.strokes}</p>
+                        <p>Total Putts: {round.total_putts}</p>
+                        <p>Total Penalties: {round.total_penalties}</p>
+                    </div>
+                ))}
+                <button onClick={() => navigate('/round')}>Start Round</button>
             </div>
             <div className="posts-container">
                 {scores && scores.map(score => (
@@ -136,17 +130,17 @@ const Score = () => {
                                     value={editContent}
                                     onChange={handleEditContentChange}
                                     placeholder="Update your score"
-                                    />
+                                />
                                 <button type="submit">Update</button>
                                 <button type="button" onClick={() => setEditScoreId(null)}>Cancel</button>
                             </form>
                         ) : (
                             <p>{score.content}</p>
-                            )}
-                            <div>{scoreDate(score.created_at)}</div>
+                        )}
+                        <div>{scoreDate(score.created_at)}</div>
                         <div className="post-actions">
-                            <button onClick={() => handleDeleteScore(post.id)}>Delete</button>
-                            <button onClick={() => handleEditScore(post)}>Edit</button>
+                            <button onClick={() => handleDeleteScore(score.id)}>Delete</button>
+                            <button onClick={() => handleEditScore(score)}>Edit</button>
                         </div>
                     </div>
                 ))}
@@ -154,5 +148,6 @@ const Score = () => {
         </div>
     );
 };
+
 
 export default Score;

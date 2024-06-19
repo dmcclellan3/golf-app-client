@@ -124,7 +124,7 @@ export const getScores = ({ auth }) => {
     console.log('GET SCORES: AUTH: ', auth.accessToken)
     return axios({
         method: 'get',
-        url:`${baseUrl}/scores/`,
+        url:`${baseUrl}/rounds-history/`,
         headers: {
             Authorization: `Bearer ${auth.accessToken}`
         }

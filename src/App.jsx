@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import Score from './Score'
 import './App.css'
 
 
@@ -12,7 +11,7 @@ function App() {
   return (
     <div className="p-5">
       <h1>Your Profile</h1>
-      <Score />
+      {/* <Score /> */}
       {/* <TrackRound /> */}
       <ul>
         {scores.map(score => (
