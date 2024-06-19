@@ -352,3 +352,10 @@ button:hover {
   margin-left: 10px;
   max-width: 250px;
 }
+
+.complete-round-button {
+  width: 250px;
+  border-radius: 10px;
+  margin-left: 10px;
+
+}

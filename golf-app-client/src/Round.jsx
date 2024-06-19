@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { 
     getCurrentRound, 
-    fetchHoles
-    // createScore, 
+    fetchHoles,
+    createScore 
     // fetchScores 
 } from './api';
 import { useParams, } from 'react-router-dom';
@@ -11,45 +11,26 @@ import './App.css'
 
 
 const TrackRound = () => {
-    const { auth } = useContext( AuthContext )
-        //   const { roundId } = useParams();
+  const { auth } = useContext( AuthContext )
+  // const { roundId } = useParams();
 //   console.log('ROUND ID: ', roundId)
 //   const history = useHistory();
   const [holes, setHoles] = useState([]);
   const [currentHole, setCurrentHole] = useState(1);
-  const [strokes, setStrokes] = useState(0);
+  const [strokes, setStrokes] = useState([]);
   const [putts, setPutts] = useState(0);
   const [penalties, setPenalties] = useState(0);
-  const [totalStrokes, setTotalStrokes] = useState(0);
+  const [totalStrokes, setTotalStrokes] = useState([]);
   const [totalPutts, setTotalPutts] = useState(0);
   const [totalPenalties, setTotalPenalties] = useState(0);
   const [totalScore, setTotalScore] = useState()
-  const [updateScore, setUpdateScore] = useState()
+  const [currentRoundId, setCurrentRoundId] = useState()
+  // const [updatedScore, setUpdateScore] = useState()
   const [scores, setScores] = useState([]);
+  // const [parScore, setParScore] = useState(0)
+  const [holeScore, setHoleScore] = useState(0)
 
-//   useEffect(() => {
-//     const getHoles = async () => {
-//       try {
-//         const round = await fetchRound(roundId);
-//         const holesData = await fetchHoles(round.course);
-//         setHoles(holesData);
-//       } catch (error) {
-//         console.error('Error fetching holes:', error);
-//       }
-//     };
 
-//     const getScores = async () => {
-//       try {
-//         const scoresData = await fetchScores(roundId);
-//         setScores(scoresData);
-//       } catch (error) {
-//         console.error('Error fetching scores:', error);
-//       }
-//     };
-
-//     getHoles();
-//     getScores();
-//   }, [roundId]);
 
     useEffect(() => {
         getTheRoundInfo()
@@ -71,6 +52,26 @@ const TrackRound = () => {
 
     },[currentHole])
 
+    useEffect(() => {
+      const strokeScore = strokes.find(stroke => stroke.hole === holes[currentHole - 1]?.id);
+      console.log("Hole Score: ", strokeScore)
+      console.log('Strokes: ', strokes)
+      if (strokeScore) {
+        setHoleScore(strokeScore.strokes)
+      }
+      // if (holeScore) {
+      //   setStrokes(holeScore.strokes);
+      //   setPutts(holeScore.putts);
+      //   setPenalties(holeScore.penalties);
+      // } else {
+      //   setStrokes(0);
+      //   setPutts(0);
+      //   setPenalties(0);
+      // }
+    }, [currentHole, holes, strokes]);
+
+
+
     const getTheRoundInfo = async () => {
         try {
             const response = await getCurrentRound({ auth })
@@ -87,172 +88,128 @@ const TrackRound = () => {
         try {
             const allHoles = await fetchHoles({ auth, roundId })
             console.log('FETCH HOLE: ', allHoles.data)
-            setHoles(allHoles.data)
+            setHoles(allHoles.data.holes)
+            setStrokes(allHoles.data.strokes)
+            setCurrentRoundId(roundId)
         } catch (error) {
             console.log('fetchHoles: ERROR:', error )
         }
     }
 
-    const handleNextHole = () => {
-        setTotalStrokes(totalStrokes + parseInt(strokes));
-        setTotalPutts(totalPutts + parseInt(putts));
-        setTotalPenalties(totalPenalties + parseInt(penalties));
+    const handleNextHole = async () => {
+        await postScore();
+        // setTotalStrokes(totalStrokes + parseInt(strokes));
+        // setTotalPutts(totalPutts + parseInt(putts));
+        // setTotalPenalties(totalPenalties + parseInt(penalties));
         setCurrentHole(currentHole + 1)
-        setTotalScore(totalStrokes + parseInt(strokes))    
-        setStrokes(0);
-        setPutts(0);
-        setPenalties(0);
+        // setTotalScore(totalStrokes + parseInt(strokes))    
+        // setStrokes(0);
+        // setPutts(0);
+        // setPenalties(0);
     }
 
-    // const handlePreviousHole = () => {
-    //     updateCurrentHoleScore();
-    //     setCurrentHole(currentHole > 1 ? currentHole - 1 : holes.length);
-    //   };
+    const handlePreviousHole = () => {
+      updateCurrentHoleScore();
+      setCurrentHole(currentHole > 1 ? currentHole - 1 : holes.length);
+    };
 
     const updateCurrentHoleScore = () => {
-        const updatedScores = scores.map(score =>
-          score.holeId === holes[currentHole - 1].id
-            ? { ...score, strokes: parseInt(strokes), putts: parseInt(putts), penalties: parseInt(penalties) }
-            : score
-        );
-        setScores(updatedScores);
+      const updatedScores = scores.map(score =>
+        score.holeId === holes[currentHole - 1].id
+          ? { ...score, strokes: parseInt(strokes), putts: parseInt(putts), penalties: parseInt(penalties) }
+          : score
+      );
+      setScores(updatedScores);
+    };
+
+
+      const updateStrokes = (direction) => {
+        if (direction === 'minus') {
+          if (Number(holeScore) > 0) {
+            postScore(Number(holeScore) - 1)
+          }
+        } else if (direction === 'plus') {
+          if (holeScore) {
+            postScore(Number(holeScore) + 1)
+          } else {
+            postScore(1)
+          }
+        }
+      }
+
+      const postScore = async (newStrokes) => {
+        console.log('NEW STROKES: ', newStrokes)
+        const holeId = holes[currentHole - 1]?.id;
+        console.log('Auth: ', auth)
+        const roundId = currentRoundId; 
+        const newScore = {
+            round: roundId,
+            hole: holeId,
+            strokes: (newStrokes !== null) ? newStrokes : 0,
+            // putts: putts !== null ? parseInt(putts) : 0,
+            // penalties: penalties !== null ? parseInt(penalties) : 0,
+            // user: auth.user.id
+        };
+    
+        try {
+            const response = await createScore({ auth, content: newScore });
+            console.log('Score posted successfully:', response.data);
+            setHoleScore(response.data.strokes)
+        } catch (error) {
+            console.log('Error posting score:', error.response.data);
+        }
       };
 
-    //   const getTotal = (type) => {
-    //     return scores.reduce((total, score) => total + score[type], 0);
-    //   };
 
 
 
     return (
-        <div className='round-container'>
+      <div className='round-container'>
           <h1 className='title'>Track Round</h1>
           <h3 className="course-name">Lakeside Golf Course</h3>
-          <h5 className='my-auto mx-3'>Current Score:{totalScore}</h5>
+          <h5 className='my-auto mx-3'>Current Score: {totalScore}</h5>
           <div id='track-round'>
-            <h2>Hole</h2>
-            <div className="my-auto mx-3" onClick={() => setCurrentHole(currentHole - 1)}>{`<-`}</div>
-            <h2>{holes[currentHole - 1]?.hole_number}</h2>
-            <div className="my-auto mx-3" onClick={() => setCurrentHole(currentHole + 1)}>{`->`}</div>
+              <h2 className='mt-1'>Hole</h2>
+              <div className="nav-arrow" onClick={handlePreviousHole}></div>
+              <h2 className='my-auto mx-3'>{holes[currentHole - 1]?.hole_number}</h2>
+              <div className="nav-arrow" onClick={handleNextHole}></div>
           </div>
           <h3>Par: {holes[currentHole - 1]?.par}</h3>
-          <div>
-            <h5>Strokes</h5>
-            <input type="number" value={strokes} onChange={(e) => setStrokes(e.target.value)} />
+          <div className='score-row'>
+              <h5>Strokes</h5>
+              <div className='input-group'>
+                  <button className='input-button' onClick={() => updateStrokes('minus')}>-</button>
+                  <input className='input-number'type="number" value={holeScore} readOnly />
+                  <button className='input-button' onClick={() => updateStrokes('plus')}>+</button>
+              </div>
           </div>
-          <div>
-            <h5>Putts</h5>
-            <input type="number" value={putts} onChange={(e) => setPutts(e.target.value)} />
+          <div className='score-row'>
+              <h5>Putts</h5>
+              <div className='input-group'>
+                  <button className='input-button' onClick={() => setPutts(putts > 0 ? putts - 1 : 0)}>-</button>
+                  <input className='input-number'type="number" value={putts} readOnly />
+                  <button className='input-button' onClick={() => setPutts(putts + 1)}>+</button>
+              </div>
           </div>
-          <div>
-            <h5>Penalties</h5>
-            <input type="number" value={penalties} onChange={(e) => setPenalties(e.target.value)} />
+          <div className='score-row'>
+              <h5>Penalties</h5>
+              <div className='input-group'>
+                  <button className='input-button' onClick={() => setPenalties(penalties > 0 ? penalties - 1 : 0)}>-</button>
+                  <input className='input-number'type="number" value={penalties} readOnly />
+                  <button className='input-button' onClick={() => setPenalties(penalties + 1)}>+</button>
+              </div>
           </div>
-          {/* <div className='total-scores'>
-          <h6>Total Strokes: {getTotal('strokes')}</h6>
-          <h6>Total Putts: {getTotal('putts')}</h6>
-          <h6>Total Penalties: {getTotal('penalties')}</h6>
-          </div> */}
           <br />
-          <button className='next-hole-button' onClick={handleNextHole}>Next Hole</button>
-        </div>
-      );
-    };
-    
-    
-    export default TrackRound;
-    
-
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     try {
-//       await createScore({
-//         round: roundId,
-//         hole: holes[currentHole - 1].id,
-//         strokes,
-//         putts,
-//         penalties,
-//       });
-//       setScores([...scores, { hole: currentHole, strokes, putts, penalties }]);
-//       setCurrentHole(currentHole + 1);
-//       setStrokes(0);
-//       setPutts(0);
-//       setPenalties(0);
-//     } catch (error) {
-//       console.error('Error creating score:', error);
-//     }
-//   };
-
-//   return (
-//       <div className='round-container'>
-//       <h1 className='title'>Track Round</h1>
-//       <h3 className="course-name">Lakeside Golf Course</h3>
-//       <h5>Current Score:</h5>
-//         <div id='track-round' className="d-flex">
-//         <h2>Hole</h2>
-//         <div className="my-auto mx-3" onClick={() => setCurrentHole(currentHole - 1)}>{`<-`}</div>
-//         <h2 className="px-3 my-auto mx-2">{holes[currentHole -1]?.hole_number}</h2>
-//         <div className="my-auto mx-3" onClick={() => setCurrentHole(currentHole + 1)}>{`->`}</div>
-//     </div>
-//       {<h3>Par: {holes[currentHole -1]?.par}</h3>}
-//       <br />
-//       <h3>Strokes</h3>
-//       <br />
-//       <h3>Putts</h3>
-//       <br />
-//       <h3>Penalties</h3>
-
-      {/* {holes[currentHole -1]?.hole_number} */}
-      {/* Create two number inputs and get values and pass them to API when called. */}
-
-      {/* {currentHole <= holes.length ? (
-        <form onSubmit={handleSubmit}>
-          <h2>Hole {currentHole}</h2>
-          <div>
-            <label>Strokes</label>
-            <input
-              type="number"
-              value={strokes}
-              onChange={(e) => setStrokes(e.target.value)}
-              required
-            />
+          <div className="button-container">
+              <button className='button previous-hole-button' onClick={handlePreviousHole}>Previous</button>
+              <button className='button next-hole-button' onClick={handleNextHole}>Next</button>
           </div>
-          <div>
-            <label>Putts</label>
-            <input
-              type="number"
-              value={putts}
-              onChange={(e) => setPutts(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label>Penalties</label>
-            <input
-              type="number"
-              value={penalties}
-              onChange={(e) => setPenalties(e.target.value)}
-              required
-            />
-          </div>
-          <button type="submit">Submit</button>
-        </form>
-      ) : (
-        <div>
-          <h2>Round Complete!</h2>
-          <button onClick={() => history.push('/rounds')}>Back to Rounds</button>
-        </div>
-      )}
-      <h3>Scores</h3>
-      <ul>
-        {scores.map((score, index) => (
-          <li key={index}>
-            Hole {score.hole}: {score.strokes} strokes, {score.putts} putts, {score.penalties} penalties
-          </li>
-        ))}
-      </ul> */}
-//     </div>
-//   );
-// };
+      </div>
+  );
+};
+
+export default TrackRound;
+
+
+
 
