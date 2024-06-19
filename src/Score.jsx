@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { getScores, updateScore, createScore, deleteScore, getCurrentRound, fetchRoundsHistory } from './api';
+import { getScores, updateScore, createScore, deleteScore, getCurrentRound, fetchRoundsHistory, createRound } from './api';
 import { AuthContext } from './authContext';
 import { useNavigate } from 'react-router-dom';
 import TrackRound from './Round';
 
 const Score = () => {
-    const [scores, setScores] = useState([]);
+    const [scores, setScores] = useState(0);
     const [newScore, setNewScore] = useState();
     const [editScoreId, setEditScoreId] = useState(null);
     const [editContent, setEditContent] = useState('');
@@ -33,8 +33,8 @@ const Score = () => {
             setRoundHistory(response.data)
         })
         .catch(error => console.log('ERROR: ', error))
+    }, [auth]);  
 
-      }, [auth]);  
   
 
        
@@ -75,7 +75,9 @@ const Score = () => {
         try {
             const response = await updateScore({ auth, scoreId: editScoreId, content: editContent });
             console.log('UPDATE SCORE RESPONSE: ', response);
-            setScores(scores.map(score => (score.id === editScoreId ? response.data : score))); //checking if the post ID matches the edit post ID if it doesn't match it leaves the post unchanged 
+            // const scoreTotal = 0
+            // response.data.map(score = scoreTotal += score.strokes)
+            // setScores(scoreTotal)
             setEditScoreId(null); 
             setEditContent('');  
         } catch (error) {
@@ -100,27 +102,59 @@ const Score = () => {
 
 
     const scoreDate = (dateString) => {
-        const format = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' }; 
+        const format = { year: 'numeric', month: 'long', day: 'numeric' }; 
         return new Date(dateString).toLocaleDateString(undefined, format);
     };
+
+    const handleStartNewRound = async () => {
+        try {
+            const response = await createRound({ auth, courseId: 1 }); 
+            console.log('NEW ROUND CREATED: ', response.data);
+            navigate(`/round/`); 
+        } catch (error) {
+            console.error('ERROR CREATING NEW ROUND: ', error);
+        }
+    };
+
+
+    
+    
+    const Round = ({ round }) => {
+        const [roundTotalStrokes, setRoundTotalStrokes] = useState(0)
+        console.log('ROUND RESPONSE: ', round)
+        useEffect(
+            () => {
+            
+                let strokeTotal = 0
+                round.scores.map(x => strokeTotal = strokeTotal + x.strokes)
+                setRoundTotalStrokes(strokeTotal)
+            },
+            []
+        )
+        return (
+            <div key={round.id} className="round-summary">
+                <h4>{round.course.name}</h4>
+                <p>{scoreDate(round.date)}</p>
+                <p><strong>Total Strokes:</strong> {roundTotalStrokes}</p>
+                {/* <p><strong>Total Putts:</strong> {round.total_putts}</p>
+                <p><strong>Total Penalties:</strong> {round.total_penalties}</p> */}
+            </div>
+        )
+    }
 
 
     return (
         <div className="round-history-container">
             <div className="create-post-container">
+                <button className='new-round-button'onClick={handleStartNewRound}>Start New Round</button>
+                <br />
+                <br />
                 <h3>Round History</h3>
                 {roundHistory.map(round => ( 
-                    <div key={round.id} className="round-summary">
-                        <h4>Course: {round.course.name}</h4>
-                        <p>Date: {scoreDate(round.date)}</p>
-                        <p>Total Strokes: {round.scores.strokes}</p>
-                        <p>Total Putts: {round.total_putts}</p>
-                        <p>Total Penalties: {round.total_penalties}</p>
-                    </div>
+                    <Round round={round} />
                 ))}
-                <button onClick={() => navigate('/round')}>Start Round</button>
             </div>
-            <div className="posts-container">
+            {/* <div className="posts-container">
                 {scores && scores.map(score => (
                     <div className="post" key={score.id}>
                         <h5>{score.username}</h5>
@@ -144,7 +178,7 @@ const Score = () => {
                         </div>
                     </div>
                 ))}
-            </div>
+            </div> */}
         </div>
     );
 };
