@@ -144,7 +144,7 @@ const Score = () => {
 
 
     return (
-        <div className="round-history-container">
+        <div className="round-history-container mt-4">
             <div className="create-post-container">
                 <button className='new-round-button'onClick={handleStartNewRound}>Start New Round</button>
                 <br />

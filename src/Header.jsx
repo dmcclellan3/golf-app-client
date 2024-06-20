@@ -11,7 +11,6 @@ function Header() {
         <span className='m-3'>
           <Link to="/score">Scores</Link>
         </span>
-      
       </div>
     );
   }

@@ -1,16 +1,26 @@
-import { useState } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import './App.css'
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from './authContext';
 
 
 function App() {
   const [scores, setScores] = useState([]);
+  const navigate = useNavigate();
+  const { auth } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (!auth.isAuthenticated) {
+      navigate('/login');
+    }
+  }, [auth, navigate]);
 
   const submit = () => {
     fetchUser({ auth })
   }
   return (
     <div className="p-5">
-      <h1>Your Profile</h1>
+      {/* <h1>Your Profile</h1> */}
       {/* <Score /> */}
       {/* <TrackRound /> */}
       <ul>

@@ -219,3 +219,14 @@ export const fetchRoundsHistory = ({ auth }) => {
         }
     });
 };
+
+export const getRoundDetails = ({ auth, roundId}) => {
+    console.log('FETCH ROUND DETAILS: ', )
+    return axios({
+        method: 'get',
+        url: `${baseUrl}/round-details/${roundId}`,
+        headers: {
+            Authorization: `Bearer ${auth.accessToken}`
+        }
+    });
+};

@@ -15,6 +15,8 @@ import TrackRound from './Round'
 import ErrorPage from './ErrorPage'
 import { useState } from 'react'
 import { AuthContext } from './authContext'
+import { RoundContext } from './roundContext.jsx'
+import ScoreCard from './Scorecard.jsx'
 
 
 function Layout() {
@@ -50,6 +52,10 @@ const router = createBrowserRouter([
         path: '/round',
         element: <TrackRound />
       },
+      {
+        path: '/scorecard',
+        element: <ScoreCard/>      
+      }
       
     ]
   }
@@ -70,11 +76,27 @@ const AuthContextProvider = ({ children }) => {
   )
 }
 
+const RoundContextProvider = ({ children }) => {
+  const [currentRoundId, setCurrentRoundId] = useState('')
+  
+  const round = {
+    currentRoundId,
+    setCurrentRoundId
+  }
+
+  return (
+    <RoundContext.Provider value={{ round }}>
+      {children}
+    </RoundContext.Provider>
+  )
+}
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   // <React.StrictMode>
+    <RoundContextProvider>
     <AuthContextProvider>
       <RouterProvider router={router} />
     </AuthContextProvider>
-  // </React.StrictMode>,
+    </RoundContextProvider>
 )

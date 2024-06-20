@@ -68,7 +68,7 @@ const CreateUser = () => {
 }
 
 function Login() {
-  const { auth } = useContext(AuthContext)
+  const { auth, setAuth } = useContext(AuthContext)
   const [username, setUsername] = useState('dukemcclellan')
   const [password, setPassword] = useState('dukepassword')
   const navigate = useNavigate()
@@ -80,7 +80,7 @@ const submit = () => {
 
 
   return (
-    <div className="auth-container">
+    <div className="auth-container mt-5">
         <div className="form-container">
         <div className="p-3">
             <h2>Login</h2>
