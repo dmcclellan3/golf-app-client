@@ -32,12 +32,7 @@ export const getToken = ({ auth, username, password }) => {
     return axios.post(`${baseUrl}/token/`, {
         username,
         password,
-    }) .then(response => {
-        console.log('get TOKEN RESPONSE: ', response)
-        auth.setAccessToken(response.data.access)
-        // fetchProfile({ auth : {accessToken : response.data.access}})
     })
-    .catch(error => console.log('Error: ', error))
 }
 
 

@@ -75,7 +75,14 @@ function Login() {
   const location = useLocation()
 
 const submit = () => {
-  getToken({ auth, username, password }).then(() => navigate('/score'))
+  getToken({ auth, username, password })
+    .then(response => {
+      console.log('get TOKEN RESPONSE: ', response)
+      auth.setAccessToken(response.data.access)
+      // fetchProfile({ auth : {accessToken : response.data.access}})
+    })
+    .then(() => navigate('/score'))
+    .catch(error => console.log('Error: ', error))
 }
 
 
