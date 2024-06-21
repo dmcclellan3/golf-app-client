@@ -1,20 +1,16 @@
 import { Link } from 'react-router-dom'
-import Nav from 'react-bootstrap/Nav';
+
 
 function Header() {
     return (
       <div className='NavBar'>
-      <Nav defaultActiveKey="/home" as="ul">
-        <Nav.Item as="li">
-          <Nav.Link href="/login">Login</Nav.Link>
-        </Nav.Item>
-        <Nav.Item as="li">
-          <Nav.Link eventKey="/Score">Scores</Nav.Link>
-        </Nav.Item>
-        <Nav.Item as="li">
-          <Nav.Link eventKey="link-2">Link</Nav.Link>
-        </Nav.Item>
-      </Nav>
+      
+        <span className='m-3'>
+          <Link to="/login">Login</Link>
+        </span>
+        <span className='m-3'>
+          <Link to="/score">Scores</Link>
+        </span>
       </div>
     );
   }

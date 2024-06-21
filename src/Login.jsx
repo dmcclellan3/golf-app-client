@@ -17,47 +17,48 @@ const CreateUser = () => {
   return (
     <div className="auth-container">
         <div className="form-container">
-        <div className="p-5">
-      <h1>Create User</h1>
+        <div className="p-3">
+      <h2>Create User</h2>
       <div>
-        <div>Username:</div>
         <div className="form-group">
             <input
+             placeholder="Username"
              onChange={e => setUsername(e.target.value)}
              value={username}
             />
         </div>
       </div>
       <div>
-        <div>Password:</div>
         <div className="form-group">
             <input
+             placeholder="Password"
              onChange={e => setPassword(e.target.value)}
              value={password}
+             type='password'
              />
         </div>
       </div>
       <div>
-        <div>First Name:</div>
         <div className="form-group">
             <input
+             placeholder="First Name"
              onChange={e => setFirstName(e.target.value)}
              value={firstName}
             />
         </div>
       </div>
       <div>
-        <div>Last Name:</div>
         <div className="form-group">
             <input
+                placeholder="Last Name"
                 onChange={e => setLastName(e.target.value)}
                 value={lastName}
             />
         </div>
       </div>
 
-      <div style={{ marginTop: 20 }}>
-        <button onClick={() => submit()}>Submit</button>
+      <div style={{ marginTop: 20, borderRadius: '5px' }}>
+        <button className='submit-button'onClick={() => submit()}>Submit</button>
       </div>
         </div>
     </div>
@@ -67,9 +68,9 @@ const CreateUser = () => {
 }
 
 function Login() {
-  const { auth } = useContext(AuthContext)
-  const [username, setUsername] = useState('dukemcclellan')
-  const [password, setPassword] = useState('dukepassword')
+  const { auth, setAuth } = useContext(AuthContext)
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -79,24 +80,24 @@ const submit = () => {
 
 
   return (
-    <div className="auth-container">
+    <div className="auth-container mt-5">
         <div className="form-container">
-        <div className="p-5">
-            <h1>Login</h1>
+        <div className="p-3">
+            <h2>Login</h2>
       
       <div>
-         <div>Username:</div>
             <div className="form-group">
                 <input
+                    placeholder="Username"
                     onChange={(e) => setUsername(e.target.value)}
                     value={username}
                 />
             </div>
       </div>
         <div>
-            <div>Password:</div>
             <div className="form-group">
                 <input
+                    placeholder="Password"
                     onChange={e => setPassword(e.target.value)}
                     value={password}
                     type="password"
@@ -104,7 +105,7 @@ const submit = () => {
             </div>
         </div>
             <div style={{ marginTop: 20 }}>
-                <button onClick={() => submit()}>Submit</button>
+                <button className="submit-button" onClick={() => submit()}>Submit</button>
             </div>
         </div>
         </div>

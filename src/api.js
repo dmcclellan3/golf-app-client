@@ -149,6 +149,13 @@ export const createCourse = ({ name, location }) => {
     .catch(error => console.log('ERROR: ', error))
 }
 
+export const fetchCourses = (auth) => {
+    return axios.get(`${baseUrl}/courses/`, {
+        headers: {
+            'Authorization': `Bearer ${auth.accessToken}`
+        }
+    });
+};
 
 export const getCurrentRound = ({ auth }) => {
     console.log('GET ROUND: AUTH: ', auth.accessToken)
@@ -161,23 +168,42 @@ export const getCurrentRound = ({ auth }) => {
     })
 }
 
-export const createRound = ({ user, course, date }) => {
-    console.log('CREATE ROUND: ', user, course, date )
-    axios({
+// export const createRound = ({ user, course, date }) => {
+//     console.log('CREATE ROUND: ', user, course, date )
+//     axios({
+//         method: 'post',
+//         url: `${baseUrl}/rounds/`, 
+//         data: {
+//             user,
+//             course,
+//             date
+//         }
+//     })
+//     .then(response => {
+//         console.log('CREATE ROUND RESPONSE: ', response)
+//     })
+//     .catch(error => console.log('ERROR: ', error))
+
+// }
+
+export const createRound = ({ auth, courseId }) => {
+    console.log('CREATE ROUND: ', auth, courseId);
+    return axios({
         method: 'post',
-        url: `${baseUrl}/rounds/`, 
+        url: `${baseUrl}/create-round/`,
+        headers: {
+            Authorization: `Bearer ${auth.accessToken}`
+        },
         data: {
-            user,
-            course,
-            date
+            course_id: courseId
         }
     })
     .then(response => {
-        console.log('CREATE ROUND RESPONSE: ', response)
+        console.log('CREATE ROUND RESPONSE: ', response);
+        return response;
     })
-    .catch(error => console.log('ERROR: ', error))
-
-}
+    .catch(error => console.log('ERROR: ', error));
+};
 
 export const fetchHoles = ({ auth, roundId }) => {
     console.log('FETCH HOLES: ', auth.accessToken)
@@ -195,6 +221,17 @@ export const fetchRoundsHistory = ({ auth }) => {
     return axios({
         method: 'get',
         url: `${baseUrl}/rounds-history/`,
+        headers: {
+            Authorization: `Bearer ${auth.accessToken}`
+        }
+    });
+};
+
+export const getRoundDetails = ({ auth, roundId}) => {
+    console.log('FETCH ROUND DETAILS: ', )
+    return axios({
+        method: 'get',
+        url: `${baseUrl}/round-details/${roundId}`,
         headers: {
             Authorization: `Bearer ${auth.accessToken}`
         }

@@ -11,28 +11,28 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "./authContext";
 // import { useHistory } from 'react-router-dom';
 import "./App.css";
+import { RoundContext } from "./roundContext";
 
 const TrackRound = () => {
   const { auth } = useContext(AuthContext);
-  // const { roundId } = useParams();
-  //   console.log('ROUND ID: ', roundId)
-  // const history = useHistory();
+  const {round} = useContext(RoundContext)
   const [holes, setHoles] = useState([]);
   const [currentHole, setCurrentHole] = useState(1);
   const [strokes, setStrokes] = useState([]);
   const [putts, setPutts] = useState(0);
   const [penalties, setPenalties] = useState(0);
+  const [totalScore, setTotalScore] = useState();
+  const [scores, setScores] = useState([]);
+  const [holeScore, setHoleScore] = useState(0);
+  const [overUnderPar, setOverUnderPar] = useState(0)
+  const { navigate } = useNavigate()
   // const [totalStrokes, setTotalStrokes] = useState([]);
   // const [totalPutts, setTotalPutts] = useState(0);
   // const [totalPenalties, setTotalPenalties] = useState(0);
-  const [totalScore, setTotalScore] = useState();
-  const [currentRoundId, setCurrentRoundId] = useState();
   // const [updatedScore, setUpdateScore] = useState()
-  const [scores, setScores] = useState([]);
   // const [parScore, setParScore] = useState(0)
-  const [holeScore, setHoleScore] = useState(0);
 
-  const { navigate } = useNavigate()
+  
 
   useEffect(() => {
     getTheRoundInfo();
@@ -41,6 +41,11 @@ const TrackRound = () => {
   useEffect(() => {
     console.log(holes[currentHole - 1]);
   }, [holes]);
+
+  useEffect(() => {
+    // calculateOverUnderPar();
+    overUnder()
+  }, [currentHole]);
 
   useEffect(() => {
     console.log("UE Current Hole: ", currentHole);
@@ -83,7 +88,7 @@ const TrackRound = () => {
       console.log("FETCH HOLE: ", allHoles.data);
       setHoles(allHoles.data.holes);
       setStrokes(allHoles.data.strokes);
-      setCurrentRoundId(roundId);
+      round.setCurrentRoundId(roundId);
     } catch (error) {
       console.log("fetchHoles: ERROR:", error);
     }
@@ -108,7 +113,6 @@ const TrackRound = () => {
     await postScore(holeScore);
     // updateCurrentHoleScore();
     setCurrentHole(currentHole + 1);
-    // setCurrentHole(currentHole + 1)
     // setTotalStrokes(totalStrokes + parseInt(strokes));
     // setTotalPutts(totalPutts + parseInt(putts));
     // setTotalPenalties(totalPenalties + parseInt(penalties));
@@ -157,7 +161,7 @@ const TrackRound = () => {
     console.log("NEW STROKES: ", newStrokes);
     const holeId = holes[currentHole - 1]?.id;
     console.log("Auth: ", auth);
-    const roundId = currentRoundId;
+    const roundId = round.currentRoundId;
     const newScore = {
       round: roundId,
       hole: holeId,
@@ -186,11 +190,44 @@ const TrackRound = () => {
     }
   };
 
+  // const calculateOverUnderPar = () => {
+  //   if (holes[currentHole - 1]) {
+  //     const par = holes[currentHole - 1].par;
+  //     const overUnder = holeScore - par;
+  //     setOverUnderPar(overUnder);
+  //   }
+  // };
+
+  const overUnder = () => {
+    let overUnderAcc = 0  
+    console.log('look here')
+    console.log(holes)
+    console.log(strokes)
+    if (strokes.length > 0) {
+      for(let i=0; i < strokes.length; i++) {
+        console.log(strokes[i])
+        console.log(strokes[i].strokes)
+        if (strokes[i].strokes) {
+          let diff = holes[i].par - strokes[i].strokes
+          overUnderAcc = overUnderAcc - diff
+          console.log('OVER UNDER ACC: ', overUnderAcc)
+        }
+      }
+      setOverUnderPar(overUnderAcc)
+      // return overUnderAcc
+    }
+  }
+
+
+  
+
+
   return (
-    <div className="round-container">
+    <div className="round-container mt-4">
+     <div><Link to='/scorecard'><h6 id='scorecard-link'>Scorecard</h6></Link></div>
       <h1 className="title">Track Round</h1>
       <h3 className="course-name">Lakeside Golf Course</h3>
-      <h5 className="my-auto mx-3">Current Score: {holeScore}</h5>
+      <h5 className="my-auto mx-3">Current Score: ({overUnderPar >= 0 ? `+${overUnderPar}` : overUnderPar})</h5>
       <div id="track-round">
         <h2 className="mt-1">Hole</h2>
         <div className="nav-arrow" onClick={handlePreviousHole}></div>
