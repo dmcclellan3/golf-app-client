@@ -27,15 +27,15 @@ const ScoreCard = () => {
     }
 
 
-    const holes = roundDetails.scores.map(score => (
+    const holeScores = roundDetails ? roundDetails.scores.map((score, i) => (
         <tr key={score.hole}>
             <td>{score.hole}</td>
-            <td>{score.par}</td>
-            <td>{score.strokes}</td>
+            <td>{round.holes[i].par}</td>
+            <td><div className={score.strokes > round.holes[i].par && 'border'}>{score.strokes}</div></td>
             {/* <td>{score.putts}</td>
             <td>{score.penalties}</td> */}
         </tr>
-    ));
+    )) : null;
             console.log("SCORE", roundDetails.scores)
     return (
         <div className="scorecard-container mt-5">
@@ -53,7 +53,7 @@ const ScoreCard = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {holes}
+                    {holeScores}
                 </tbody>
             </table>
         </div>

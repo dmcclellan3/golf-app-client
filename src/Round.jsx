@@ -16,7 +16,8 @@ import { RoundContext } from "./roundContext";
 const TrackRound = () => {
   const { auth } = useContext(AuthContext);
   const {round} = useContext(RoundContext)
-  const [holes, setHoles] = useState([]);
+  // const {holes, setHoles} = useContext(RoundContext)
+  // const [holes, setHoles] = useState([]);
   const [currentHole, setCurrentHole] = useState(1);
   const [strokes, setStrokes] = useState([]);
   const [putts, setPutts] = useState(0);
@@ -32,15 +33,15 @@ const TrackRound = () => {
   // const [updatedScore, setUpdateScore] = useState()
   // const [parScore, setParScore] = useState(0)
 
-  
+  console.log(round.holes)  
 
   useEffect(() => {
     getTheRoundInfo();
   }, [navigate]);
 
   useEffect(() => {
-    console.log(holes[currentHole - 1]);
-  }, [holes]);
+    console.log(round.holes[currentHole - 1]);
+  }, [round.holes]);
 
   useEffect(() => {
     // calculateOverUnderPar();
@@ -51,16 +52,16 @@ const TrackRound = () => {
     console.log("UE Current Hole: ", currentHole);
     console.log("Current score: ");
     if (currentHole <= 0) {
-      setCurrentHole(holes.length);
+      setCurrentHole(round.holes.length);
     }
-    if (currentHole >= holes.length + 1) {
+    if (currentHole >= round.holes.length + 1) {
       setCurrentHole(1);
     }
   }, [currentHole]);
 
   useEffect(() => {
     const strokeScore = strokes.find(
-      (stroke) => stroke.hole === holes[currentHole - 1]?.id
+      (stroke) => stroke.hole === round.holes[currentHole - 1]?.id
     );
     console.log("Hole Score: ", strokeScore);
     console.log("Strokes: ", strokes);
@@ -76,7 +77,7 @@ const TrackRound = () => {
     //   setPutts(0);
     //   setPenalties(0);
     // }
-  }, [currentHole, holes, strokes]);
+  }, [currentHole, round.holes, strokes]);
 
   useEffect(() => {
     roundHistory();
@@ -86,7 +87,7 @@ const TrackRound = () => {
     try {
       const allHoles = await fetchHoles({ auth, roundId });
       console.log("FETCH HOLE: ", allHoles.data);
-      setHoles(allHoles.data.holes);
+      round.setHoles(allHoles.data.holes);
       setStrokes(allHoles.data.strokes);
       round.setCurrentRoundId(roundId);
     } catch (error) {
@@ -131,7 +132,7 @@ const TrackRound = () => {
 
   const updateCurrentHoleScore = () => {
     const updatedScores = scores.map((score) =>
-      score.holeId === holes[currentHole - 1].id
+      score.holeId === round.holes[currentHole - 1].id
         ? {
             ...score,
             strokes: parseInt(strokes),
@@ -159,7 +160,7 @@ const TrackRound = () => {
 
   const postScore = async (newStrokes) => {
     console.log("NEW STROKES: ", newStrokes);
-    const holeId = holes[currentHole - 1]?.id;
+    const holeId = round.holes[currentHole - 1]?.id;
     console.log("Auth: ", auth);
     const roundId = round.currentRoundId;
     const newScore = {
@@ -201,14 +202,14 @@ const TrackRound = () => {
   const overUnder = () => {
     let overUnderAcc = 0  
     console.log('look here')
-    console.log(holes)
+    console.log(round.holes)
     console.log(strokes)
     if (strokes.length > 0) {
       for(let i=0; i < strokes.length; i++) {
         console.log(strokes[i])
         console.log(strokes[i].strokes)
         if (strokes[i].strokes) {
-          let diff = holes[i].par - strokes[i].strokes
+          let diff = round.holes[i].par - strokes[i].strokes
           overUnderAcc = overUnderAcc - diff
           console.log('OVER UNDER ACC: ', overUnderAcc)
         }
@@ -231,10 +232,10 @@ const TrackRound = () => {
       <div id="track-round">
         <h2 className="mt-1">Hole</h2>
         <div className="nav-arrow" onClick={handlePreviousHole}></div>
-        <h2 className="my-auto mx-3">{holes[currentHole - 1]?.hole_number}</h2>
+        <h2 className="my-auto mx-3">{round.holes[currentHole - 1]?.hole_number}</h2>
         <div className="nav-arrow" onClick={handleNextHole}></div>
       </div>
-      <h3>Par: {holes[currentHole - 1]?.par}</h3>
+      <h3>Par: {round.holes[currentHole - 1]?.par}</h3>
       <div className="score-row">
         <h5>Strokes</h5>
         <div className="input-group">
@@ -311,12 +312,12 @@ const TrackRound = () => {
             Previous
           </button>
         ) : null}
-        {currentHole === holes.length ? (
+        {currentHole === round.holes.length ? (
           <Link to="/score">
             <button className="complete-round-button">Complete Round</button>
           </Link>
         ) : null}
-        {currentHole < holes.length ? (
+        {currentHole < round.holes.length ? (
           <button className="button next-hole-button" onClick={handleNextHole}>
             Next
           </button>
