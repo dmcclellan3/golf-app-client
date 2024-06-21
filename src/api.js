@@ -149,6 +149,13 @@ export const createCourse = ({ name, location }) => {
     .catch(error => console.log('ERROR: ', error))
 }
 
+export const fetchCourses = (auth) => {
+    return axios.get(`${baseUrl}/courses/`, {
+        headers: {
+            'Authorization': `Bearer ${auth.accessToken}`
+        }
+    });
+};
 
 export const getCurrentRound = ({ auth }) => {
     console.log('GET ROUND: AUTH: ', auth.accessToken)

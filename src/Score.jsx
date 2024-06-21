@@ -10,6 +10,7 @@ const Score = () => {
     const [editScoreId, setEditScoreId] = useState(null);
     const [editContent, setEditContent] = useState('');
     const [roundHistory, setRoundHistory] = useState([])
+
     const { auth } = useContext(AuthContext);
     const navigate = useNavigate()
 
@@ -35,9 +36,15 @@ const Score = () => {
         .catch(error => console.log('ERROR: ', error))
     }, [auth]);  
 
-  
-
-       
+    // useEffect(() => {
+    //     getCourses();
+    //   }, []);
+    
+    //   useEffect(() => {
+    //     if (selectedCourse) {         //Trying this to implement course selection
+    //       getTheRoundInfo();
+    //     }
+    //   }, [selectedCourse]);
 
     
 
@@ -67,38 +74,39 @@ const Score = () => {
         setEditContent(score.content);
     };
 
+
     //Handles form submission to update, calls the API endpoint 
     //
 
-    const handleUpdateScore = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await updateScore({ auth, scoreId: editScoreId, content: editContent });
-            console.log('UPDATE SCORE RESPONSE: ', response);
-            // const scoreTotal = 0
-            // response.data.map(score = scoreTotal += score.strokes)
-            // setScores(scoreTotal)
-            setEditScoreId(null); 
-            setEditContent('');  
-        } catch (error) {
-            console.error('Error UPDATING SCORE:', error);
-        }
-    };
+    // const handleUpdateScore = async (e) => {
+    //     e.preventDefault();
+    //     try {
+    //         const response = await updateScore({ auth, scoreId: editScoreId, content: editContent });
+    //         console.log('UPDATE SCORE RESPONSE: ', response);
+    //         // const scoreTotal = 0
+    //         // response.data.map(score = scoreTotal += score.strokes)
+    //         // setScores(scoreTotal)
+    //         setEditScoreId(null); 
+    //         setEditContent('');  
+    //     } catch (error) {
+    //         console.error('Error UPDATING SCORE:', error);
+    //     }
+    // };
 
-    const handleEditContentChange = (e) => {
-        setEditContent(e.target.value);
-    };
+    // const handleEditContentChange = (e) => {
+    //     setEditContent(e.target.value);
+    // };
 
 
-    const handleDeleteScore = async (scoreId) => {
-        try {
-            await deleteScore({ auth, scoreId });
-            setScores(scores.filter(score => score.id !== score.Id));  
-            console.log('SCORE DELETED!');
-        } catch (error) {
-            console.error('ERROR DELETING SCORE: ', error);
-        }
-    };
+    // const handleDeleteScore = async (scoreId) => {
+    //     try {
+    //         await deleteScore({ auth, scoreId });
+    //         setScores(scores.filter(score => score.id !== score.Id));  
+    //         console.log('SCORE DELETED!');
+    //     } catch (error) {
+    //         console.error('ERROR DELETING SCORE: ', error);
+    //     }
+    // };
 
 
     const scoreDate = (dateString) => {

@@ -32,6 +32,7 @@ const TrackRound = () => {
   // const [updatedScore, setUpdateScore] = useState()
   // const [parScore, setParScore] = useState(0)
 
+  
 
   useEffect(() => {
     getTheRoundInfo();
@@ -42,8 +43,9 @@ const TrackRound = () => {
   }, [holes]);
 
   useEffect(() => {
-    calculateOverUnderPar();
-  }, [holeScore]);
+    // calculateOverUnderPar();
+    overUnder()
+  }, [currentHole]);
 
   useEffect(() => {
     console.log("UE Current Hole: ", currentHole);
@@ -188,13 +190,34 @@ const TrackRound = () => {
     }
   };
 
-  const calculateOverUnderPar = () => {
-    if (holes[currentHole - 1]) {
-      const par = holes[currentHole - 1].par;
-      const overUnder = holeScore - par;
-      setOverUnderPar(overUnder);
+  // const calculateOverUnderPar = () => {
+  //   if (holes[currentHole - 1]) {
+  //     const par = holes[currentHole - 1].par;
+  //     const overUnder = holeScore - par;
+  //     setOverUnderPar(overUnder);
+  //   }
+  // };
+
+  const overUnder = () => {
+    let overUnderAcc = 0  
+    console.log('look here')
+    console.log(holes)
+    console.log(strokes)
+    if (strokes.length > 0) {
+      for(let i=0; i < strokes.length; i++) {
+        console.log(strokes[i])
+        console.log(strokes[i].strokes)
+        if (strokes[i].strokes) {
+          let diff = holes[i].par - strokes[i].strokes
+          overUnderAcc = overUnderAcc - diff
+          console.log('OVER UNDER ACC: ', overUnderAcc)
+        }
+      }
+      setOverUnderPar(overUnderAcc)
+      // return overUnderAcc
     }
-  };
+  }
+
 
   
 

@@ -69,8 +69,8 @@ const CreateUser = () => {
 
 function Login() {
   const { auth, setAuth } = useContext(AuthContext)
-  const [username, setUsername] = useState('dukemcclellan')
-  const [password, setPassword] = useState('dukepassword')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const navigate = useNavigate()
   const location = useLocation()
 

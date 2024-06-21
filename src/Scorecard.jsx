@@ -36,7 +36,7 @@ const ScoreCard = () => {
             <td>{score.penalties}</td> */}
         </tr>
     ));
-
+            console.log("SCORE", roundDetails.scores)
     return (
         <div className="scorecard-container mt-5">
             <Link to='/round'><h6>Back</h6></Link>
