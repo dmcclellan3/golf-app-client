@@ -142,7 +142,7 @@ const Score = () => {
         return (
             <div key={round.id} className="round-summary">
                 <h4>{round.course.name}</h4>
-                <p>{scoreDate(round.date)}</p>
+                <p className='score-date'>{scoreDate(round.date)}</p>
                 <p><strong>Total Strokes:</strong> {roundTotalStrokes}</p>
                 {/* <p><strong>Total Putts:</strong> {round.total_putts}</p>
                 <p><strong>Total Penalties:</strong> {round.total_penalties}</p> */}

@@ -56,6 +56,7 @@ const ScoreCard = () => {
                     {holeScores}
                 </tbody>
             </table>
+            <Link to='/score'><button className="btn">Complete Round</button></Link>
         </div>
     );
 };

@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "./authContext";
 // import { useHistory } from 'react-router-dom';
 import "./App.css";
+// import './Round.css'
 import { RoundContext } from "./roundContext";
 
 const TrackRound = () => {
@@ -230,12 +231,12 @@ const TrackRound = () => {
       <h3 className="course-name">Lakeside Golf Course</h3>
       <h5 className="my-auto mx-3">Current Score: ({overUnderPar >= 0 ? `+${overUnderPar}` : overUnderPar})</h5>
       <div id="track-round">
-        <h2 className="mt-1">Hole</h2>
+        <h2 className="my-auto mx-3">Hole</h2>
         <div className="nav-arrow" onClick={handlePreviousHole}></div>
         <h2 className="my-auto mx-3">{round.holes[currentHole - 1]?.hole_number}</h2>
         <div className="nav-arrow" onClick={handleNextHole}></div>
       </div>
-      <h3>Par: {round.holes[currentHole - 1]?.par}</h3>
+      <h4>Par: {round.holes[currentHole - 1]?.par}</h4>
       <div className="score-row">
         <h5>Strokes</h5>
         <div className="input-group">

@@ -8,7 +8,7 @@ import {
 import App from './App.jsx'
 import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import Header from './Header'
+// import Header from './Header'
 import Login from './Login'
 import Score from './Score'
 import TrackRound from './Round'
@@ -17,12 +17,13 @@ import { useState } from 'react'
 import { AuthContext } from './authContext'
 import { RoundContext } from './roundContext.jsx'
 import ScoreCard from './Scorecard.jsx'
+import LandingPage from './LandingPage.jsx'
 
 
 function Layout() {
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <div id='page-content'>
         <Outlet />
       </div>
@@ -54,7 +55,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/scorecard',
-        element: <ScoreCard/>      
+        element: <ScoreCard/>
+      },    
+      {
+        path: '/landingpage',
+        element: <LandingPage/>
       }
       
     ]
