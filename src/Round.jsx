@@ -9,16 +9,12 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { AuthContext } from "./authContext";
-// import { useHistory } from 'react-router-dom';
 import "./App.css";
 import { RoundContext } from "./roundContext";
 
 const TrackRound = () => {
   const { auth } = useContext(AuthContext);
-  const {round} = useContext(RoundContext)
-  // const {holes, setHoles} = useContext(RoundContext)
-  // const [holes, setHoles] = useState([]);
-  const [currentHole, setCurrentHole] = useState(1);
+  const {round, currentHole, setCurrentHole} = useContext(RoundContext)
   const [strokes, setStrokes] = useState([]);
   const [putts, setPutts] = useState(0);
   const [penalties, setPenalties] = useState(0);
@@ -27,12 +23,7 @@ const TrackRound = () => {
   const [holeScore, setHoleScore] = useState(0);
   const [overUnderPar, setOverUnderPar] = useState(0)
   const { navigate } = useNavigate()
-  // const [totalStrokes, setTotalStrokes] = useState([]);
-  // const [totalPutts, setTotalPutts] = useState(0);
-  // const [totalPenalties, setTotalPenalties] = useState(0);
-  // const [updatedScore, setUpdateScore] = useState()
-  // const [parScore, setParScore] = useState(0)
-
+  
   console.log(round.holes)  
 
   useEffect(() => {
@@ -67,16 +58,10 @@ const TrackRound = () => {
     console.log("Strokes: ", strokes);
     if (strokeScore) {
       setHoleScore(strokeScore.strokes);
+    } else {
+      setHoleScore(0)
     }
-    // if (holeScore) {
-    //   setStrokes(holeScore.strokes);
-    //   setPutts(holeScore.putts);
-    //   setPenalties(holeScore.penalties);
-    // } else {
-    //   setStrokes(0);
-    //   setPutts(0);
-    //   setPenalties(0);
-    // }
+    
   }, [currentHole, round.holes, strokes]);
 
   useEffect(() => {
@@ -114,13 +99,7 @@ const TrackRound = () => {
     await postScore(holeScore);
     // updateCurrentHoleScore();
     setCurrentHole(currentHole + 1);
-    // setTotalStrokes(totalStrokes + parseInt(strokes));
-    // setTotalPutts(totalPutts + parseInt(putts));
-    // setTotalPenalties(totalPenalties + parseInt(penalties));
-    // setTotalScore(totalStrokes + parseInt(strokes))
-    // setStrokes(0);
-    // setPutts(0);
-    // setPenalties(0);
+    
   };
 
   const handlePreviousHole = async () => {
@@ -175,7 +154,7 @@ const TrackRound = () => {
     try {
       const response = await createScore({ auth, content: newScore });
       console.log("Score posted successfully:", response.data);
-      await setHoleScore(response.data.strokes);
+      // await setHoleScore(response.data.strokes);    
       await getAllHoles({ roundId });
     } catch (error) {
       console.log("Error posting score:", error.response.data);
@@ -225,17 +204,16 @@ const TrackRound = () => {
 
   return (
     <div className="round-container mt-4">
-     <div><Link to='/scorecard'><h6 id='scorecard-link'>Scorecard</h6></Link></div>
       <h1 className="title">Track Round</h1>
       <h3 className="course-name">Lakeside Golf Course</h3>
       <h5 className="my-auto mx-3">Current Score: ({overUnderPar >= 0 ? `+${overUnderPar}` : overUnderPar})</h5>
       <div id="track-round">
-        <h2 className="mt-1">Hole</h2>
+        <h2 className="my-auto mx-3">Hole</h2>
         <div className="nav-arrow" onClick={handlePreviousHole}></div>
         <h2 className="my-auto mx-3">{round.holes[currentHole - 1]?.hole_number}</h2>
         <div className="nav-arrow" onClick={handleNextHole}></div>
       </div>
-      <h3>Par: {round.holes[currentHole - 1]?.par}</h3>
+      <h4>Par: {round.holes[currentHole - 1]?.par}</h4>
       <div className="score-row">
         <h5>Strokes</h5>
         <div className="input-group">
@@ -303,18 +281,19 @@ const TrackRound = () => {
         </div>
       </div>
       <br />
+        <div><Link to='/scorecard'><h6 id='scorecard-link'>Scorecard</h6></Link></div>
       <div className="button-container justify-content-center">
         {currentHole > 1 ? (
           <button
-            className="button previous-hole-button"
-            onClick={handlePreviousHole}
+          className="button previous-hole-button"
+          onClick={handlePreviousHole}
           >
             Previous
           </button>
         ) : null}
         {currentHole === round.holes.length ? (
           <Link to="/score">
-            <button className="complete-round-button">Complete Round</button>
+            <button className="complete-round-button" onClick={() => setCurrentHole(1)}>Complete Round</button>
           </Link>
         ) : null}
         {currentHole < round.holes.length ? (

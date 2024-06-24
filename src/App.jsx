@@ -2,6 +2,8 @@ import { useState, useEffect, useContext } from 'react'
 import './App.css'
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from './authContext';
+import LandingPage from './LandingPage';
+
 
 
 function App() {
@@ -11,7 +13,7 @@ function App() {
 
   useEffect(() => {
     if (!auth.isAuthenticated) {
-      navigate('/login');
+      navigate('/landingpage');
     }
   }, [auth, navigate]);
 

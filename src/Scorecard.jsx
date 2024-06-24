@@ -31,7 +31,7 @@ const ScoreCard = () => {
         <tr key={score.hole}>
             <td>{score.hole}</td>
             <td>{round.holes[i].par}</td>
-            <td><div className={score.strokes > round.holes[i].par && 'border'}>{score.strokes}</div></td>
+            <td><div className={score.strokes > round.holes[i].par ? 'border' : ''}>{score.strokes}</div></td>
             {/* <td>{score.putts}</td>
             <td>{score.penalties}</td> */}
         </tr>
@@ -56,6 +56,7 @@ const ScoreCard = () => {
                     {holeScores}
                 </tbody>
             </table>
+            <Link to='/score'><button className="btn">Complete Round</button></Link>
         </div>
     );
 };

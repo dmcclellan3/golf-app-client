@@ -3,6 +3,7 @@ import { getScores, updateScore, createScore, deleteScore, getCurrentRound, fetc
 import { AuthContext } from './authContext';
 import { useNavigate } from 'react-router-dom';
 import TrackRound from './Round';
+import { RoundContext } from './roundContext';
 
 const Score = () => {
     const [scores, setScores] = useState(0);
@@ -12,6 +13,7 @@ const Score = () => {
     const [roundHistory, setRoundHistory] = useState([])
 
     const { auth } = useContext(AuthContext);
+    const { setCurrentHole } = useContext(RoundContext)
     const navigate = useNavigate()
 
 // Fetches post from api, logs response and sets the posts from the data stored at the end point. 
@@ -36,15 +38,9 @@ const Score = () => {
         .catch(error => console.log('ERROR: ', error))
     }, [auth]);  
 
-    // useEffect(() => {
-    //     getCourses();
-    //   }, []);
-    
-    //   useEffect(() => {
-    //     if (selectedCourse) {         //Trying this to implement course selection
-    //       getTheRoundInfo();
-    //     }
-    //   }, [selectedCourse]);
+    useEffect(() => {
+        setCurrentHole(1)
+    }, [navigate])
 
     
 
@@ -110,6 +106,7 @@ const Score = () => {
 
 
     const scoreDate = (dateString) => {
+        console.log('BLAMMO: DATE: ', dateString)
         const format = { year: 'numeric', month: 'long', day: 'numeric' }; 
         return new Date(dateString).toLocaleDateString(undefined, format);
     };
@@ -142,7 +139,7 @@ const Score = () => {
         return (
             <div key={round.id} className="round-summary">
                 <h4>{round.course.name}</h4>
-                <p>{scoreDate(round.date)}</p>
+                <p className='score-date'>{scoreDate(round.date)}</p>
                 <p><strong>Total Strokes:</strong> {roundTotalStrokes}</p>
                 {/* <p><strong>Total Putts:</strong> {round.total_putts}</p>
                 <p><strong>Total Penalties:</strong> {round.total_penalties}</p> */}
