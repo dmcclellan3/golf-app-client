@@ -319,10 +319,11 @@ button:hover {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   max-width: 500px;
   width: 90%;
+  max-height: 90vh;
   text-align: center;
   margin: auto;
   transition: transform 0.3s, box-shadow 0.3s;
-  overflow: scroll;
+  overflow-y: auto;
 }
 
 .scorecard-container:hover {
