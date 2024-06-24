@@ -16,7 +16,7 @@ const CreateUser = () => {
   }
 
   return (
-    <div className="auth-container">
+    <div id='login-page'className="auth-container">
         <div className="form-container">
         <div className="p-3">
       <h2>Create User</h2>

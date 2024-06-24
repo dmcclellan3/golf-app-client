@@ -84,7 +84,9 @@ const AuthContextProvider = ({ children }) => {
 const RoundContextProvider = ({ children }) => {
   const [currentRoundId, setCurrentRoundId] = useState('')
   const [holes, setHoles] = useState([]);
+  const [currentHole, setCurrentHole] = useState(1);
   
+
   const round = {
     currentRoundId,
     setCurrentRoundId,
@@ -93,7 +95,7 @@ const RoundContextProvider = ({ children }) => {
   }
 
   return (
-    <RoundContext.Provider value={{ round }}>
+    <RoundContext.Provider value={{ round, currentHole, setCurrentHole }}>
       {children}
     </RoundContext.Provider>
   )
