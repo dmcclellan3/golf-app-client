@@ -170,6 +170,7 @@ nav a:hover {
   color: #007bff;
   font-size: 40px;
   text-align: center;
+  cursor: pointer;
 }
 
 .complete-round-button {
