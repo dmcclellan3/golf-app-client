@@ -11,6 +11,12 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "./authContext";
 import "./App.css";
 import { RoundContext } from "./roundContext";
+import { GrScorecard } from "react-icons/gr";
+import { FaArrowRight } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa6";
+import { GiCheckMark } from "react-icons/gi";
+
+
 
 const TrackRound = () => {
   const { auth } = useContext(AuthContext);
@@ -204,6 +210,9 @@ const TrackRound = () => {
 
   return (
     <div className="round-container mt-4">
+        <div><Link to='/scorecard'>
+        <GrScorecard id='scorecard-link'><h6>Scorecard</h6></GrScorecard>
+        </Link></div>
       <h1 className="title">Track Round</h1>
       <h3 className="course-name">Lakeside Golf Course</h3>
       <h5 className="my-auto mx-3">Current Score: ({overUnderPar >= 0 ? `+${overUnderPar}` : overUnderPar})</h5>
@@ -281,25 +290,27 @@ const TrackRound = () => {
         </div>
       </div>
       <br />
-        <div><Link to='/scorecard'><h6 id='scorecard-link'>Scorecard</h6></Link></div>
       <div className="button-container justify-content-center">
         {currentHole > 1 ? (
-          <button
+          <FaArrowLeft 
           className="button previous-hole-button"
           onClick={handlePreviousHole}
           >
             Previous
-          </button>
+          </FaArrowLeft>
         ) : null}
         {currentHole === round.holes.length ? (
           <Link to="/score">
-            <button className="complete-round-button" onClick={() => setCurrentHole(1)}>Complete Round</button>
+            <GiCheckMark 
+            className="complete-round-button" onClick={() => setCurrentHole(1)}>Complete Round
+            </GiCheckMark>
           </Link>
         ) : null}
         {currentHole < round.holes.length ? (
-          <button className="button next-hole-button" onClick={handleNextHole}>
+          <FaArrowRight
+          className="next-hole-button" onClick={handleNextHole}>
             Next
-          </button>
+          </FaArrowRight>
         ) : null}
       </div>
     </div>

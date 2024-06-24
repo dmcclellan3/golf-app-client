@@ -4,6 +4,7 @@ import { getRoundDetails } from './api';
 import { AuthContext } from './authContext';
 import { RoundContext } from './roundContext';
 import { Link } from 'react-router-dom';
+import { GoArrowLeft } from "react-icons/go";
 
 
 const ScoreCard = () => {
@@ -39,7 +40,9 @@ const ScoreCard = () => {
             console.log("SCORE", roundDetails.scores)
     return (
         <div className="scorecard-container mt-5">
-            <Link to='/round'><h6>Back</h6></Link>
+            <Link to='/round'>
+                <GoArrowLeft className='back-button'><h6>Back</h6></GoArrowLeft>
+                </Link>
             <h2>Scorecard</h2>
             <h3>{roundDetails.course.name}</h3>
             <table className="scorecard-table">
@@ -56,7 +59,7 @@ const ScoreCard = () => {
                     {holeScores}
                 </tbody>
             </table>
-            <Link to='/score'><button className="btn">Complete Round</button></Link>
+            {/* <Link to='/score'><button className="btn">Complete Round</button></Link> */}
         </div>
     );
 };
