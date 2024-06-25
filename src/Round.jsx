@@ -214,8 +214,10 @@ const TrackRound = () => {
         <GrScorecard id='scorecard-link'><h6>Scorecard</h6></GrScorecard>
         </Link></div>
       <h1 className="title">Track Round</h1>
+      <br />
       <h3 className="course-name">Lakeside Golf Course</h3>
       <h5 className="my-auto mx-3">Current Score: ({overUnderPar >= 0 ? `+${overUnderPar}` : overUnderPar})</h5>
+      <br />
       <div id="track-round">
         <h2 className="my-auto mx-3">Hole</h2>
         <div className="nav-arrow" onClick={handlePreviousHole}></div>
