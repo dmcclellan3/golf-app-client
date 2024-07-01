@@ -111,8 +111,7 @@ const TrackRound = () => {
   const handlePreviousHole = async () => {
     await postScore(holeScore);
     setCurrentHole(currentHole - 1);
-    // updateCurrentHoleScore();
-    // setCurrentHole(currentHole > 1 ? currentHole - 1 : holes.length);
+    
   };
 
   const updateCurrentHoleScore = () => {
@@ -152,15 +151,12 @@ const TrackRound = () => {
       round: roundId,
       hole: holeId,
       strokes: newStrokes !== null ? newStrokes : 0,
-      // putts: putts !== null ? parseInt(putts) : 0,
-      // penalties: penalties !== null ? parseInt(penalties) : 0,
-      // user: auth.user.id
+      
     };
 
     try {
       const response = await createScore({ auth, content: newScore });
       console.log("Score posted successfully:", response.data);
-      // await setHoleScore(response.data.strokes);    
       await getAllHoles({ roundId });
     } catch (error) {
       console.log("Error posting score:", error.response.data);
@@ -175,14 +171,6 @@ const TrackRound = () => {
       console.log("getTheRoundInfo: ERROR: ", error);
     }
   };
-
-  // const calculateOverUnderPar = () => {
-  //   if (holes[currentHole - 1]) {
-  //     const par = holes[currentHole - 1].par;
-  //     const overUnder = holeScore - par;
-  //     setOverUnderPar(overUnder);
-  //   }
-  // };
 
   const overUnder = () => {
     let overUnderAcc = 0  
@@ -200,7 +188,6 @@ const TrackRound = () => {
         }
       }
       setOverUnderPar(overUnderAcc)
-      // return overUnderAcc
     }
   }
 

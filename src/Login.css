@@ -4,8 +4,6 @@ body, html {
     font-family: 'Arial', sans-serif;
     height: 100%;
     width: 100%;
-    /* display: flex; */
-    /* background-size: cover; */
     background: url('https://www.liveabout.com/thmb/57ChT1uSR28aV6rvqRX_0TjHft4=/5256x3504/filters:fill(auto,1)/close-up-of-a-golf-ball-on-a-tee-73502963-58b5a7d55f9b5860469b8be7.jpg')no-repeat center center fixed;
     background-size: cover;
 
