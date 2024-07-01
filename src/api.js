@@ -28,7 +28,7 @@ export const createUser = ({ username, password, firstName, lastName }) => {
 // Requests on authentication token after credentials are entered
 
 export const getToken = ({ auth, username, password }) => {
-    console.log('get TOKEN: ', auth, username, password)
+    // console.log('get TOKEN: ', auth, username, password)
     return axios.post(`${baseUrl}/token/`, {
         username,
         password,
@@ -47,14 +47,14 @@ export const fetchProfile = ({ auth }) => {
             Authorization: `Bearer ${auth.accessToken}`
         }
     }).then(response => {
-        console.log('FETCH PROFILE RESPONSE: ', response)
+        // console.log('FETCH PROFILE RESPONSE: ', response)
     }).catch(error => console.log('ERROR: ', error))
 }
 
 //sends request to create score to API with the content of the score 
 
 export const createScore = ({ auth, content }) => {
-    console.log('CREATE SCORE: ', auth, content)
+    // console.log('CREATE SCORE: ', auth, content)
     return axios({
         method: 'post',
         url: `${baseUrl}/create-score/`,
@@ -66,7 +66,7 @@ export const createScore = ({ auth, content }) => {
         }
     })
     .then(response => {
-        console.log('CREATE SCORE RESPONSE: ', response)
+        // console.log('CREATE SCORE RESPONSE: ', response)
         return response
     })
     .catch(error => console.log('ERROR: ', error))
