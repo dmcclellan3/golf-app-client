@@ -36,9 +36,6 @@ export const getToken = ({ auth, username, password }) => {
 }
 
 
-// After authentication token is received this function fetches the profile
-// and consoles the response 
-
 export const fetchProfile = ({ auth }) => {
     axios({
         method: 'get',
@@ -51,7 +48,6 @@ export const fetchProfile = ({ auth }) => {
     }).catch(error => console.log('ERROR: ', error))
 }
 
-//sends request to create score to API with the content of the score 
 
 export const createScore = ({ auth, content }) => {
     // console.log('CREATE SCORE: ', auth, content)
@@ -74,9 +70,6 @@ export const createScore = ({ auth, content }) => {
 }
 
 
-//But similar to create this function is intended to send a different 
-//request "PUT" to update a previous score 
-
 export const updateScore = ({ auth, scoreId, content }) => {
     console.log("edit score id", scoreId)
     console.log("content", content)
@@ -97,8 +90,6 @@ export const updateScore = ({ auth, scoreId, content }) => {
     .catch(error => console.log('ERROR: ', error))
 };
 
-// Sends request to API to delete with the scoreID to specify what score 
-//to delete 
 
 export const deleteScore = ({ auth, scoreId }) => {
     return axios({
@@ -163,23 +154,6 @@ export const getCurrentRound = ({ auth }) => {
     })
 }
 
-// export const createRound = ({ user, course, date }) => {
-//     console.log('CREATE ROUND: ', user, course, date )
-//     axios({
-//         method: 'post',
-//         url: `${baseUrl}/rounds/`, 
-//         data: {
-//             user,
-//             course,
-//             date
-//         }
-//     })
-//     .then(response => {
-//         console.log('CREATE ROUND RESPONSE: ', response)
-//     })
-//     .catch(error => console.log('ERROR: ', error))
-
-// }
 
 export const createRound = ({ auth, courseId }) => {
     console.log('CREATE ROUND: ', auth, courseId);
